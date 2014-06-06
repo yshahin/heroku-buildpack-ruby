@@ -104,29 +104,6 @@ class LanguagePack::Base
     end
   end
 
-  # log output
-  # Ex. log "some_message", "here", :someattr="value"
-  def log(*args)
-    args.concat [:id => @id]
-    args.concat [:framework => self.class.to_s.split("::").last.downcase]
-
-    start = Time.now.to_f
-    log_internal args, :start => start
-
-    if block_given?
-      begin
-        ret = yield
-        finish = Time.now.to_f
-        log_internal args, :status => "complete", :finish => finish, :elapsed => (finish - start)
-        return ret
-      rescue StandardError => ex
-        finish = Time.now.to_f
-        log_internal args, :status => "error", :finish => finish, :elapsed => (finish - start), :message => ex.message
-        raise ex
-      end
-    end
-  end
-
 private ##################################
 
   # sets up the environment variables for the build process
